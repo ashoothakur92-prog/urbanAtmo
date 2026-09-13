@@ -1,0 +1,6 @@
+{
+  "name": "UrbanAtmo",
+  "description": "Breathe Better. Live Greener. Clean & Green urban sustainability platform for air quality monitoring, waste segregation, recycling, and eco-rewards.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
