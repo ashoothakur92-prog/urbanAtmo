@@ -5,6 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    base:'/urbanAtmo,
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
