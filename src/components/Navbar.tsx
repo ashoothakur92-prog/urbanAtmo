@@ -3,14 +3,7 @@ import {
   Leaf, 
   Wind, 
   Award, 
-  Globe, 
-  User, 
-  FileText, 
-  Recycle, 
-  Store, 
-  Compass, 
-  Flame,
-  ChevronDown
+  Globe
 } from 'lucide-react';
 import { PageType, UserProfile } from '../types';
 
@@ -29,14 +22,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   isHindi,
   onToggleLanguage
 }) => {
-  const navItems: { id: PageType; label: string; labelHi: string; icon: React.ReactNode }[] = [
-    { id: 'home', label: 'Dashboard', labelHi: 'डैशबोर्ड', icon: <Compass className="h-4 w-4" /> },
-    { id: 'report-issue', label: 'Report Issue', labelHi: 'समस्या दर्ज करें', icon: <FileText className="h-4 w-4" /> },
-    { id: 'waste-segregation', label: 'Live Segregation', labelHi: 'कचरा पृथक्करण', icon: <Recycle className="h-4 w-4" /> },
-    { id: 'sell-junk', label: 'Sell Junk', labelHi: 'कबाड़ बेचें', icon: <Flame className="h-4 w-4" /> },
-    { id: 'scrap-dealers', label: 'Scrap Dealers', labelHi: 'कबाड़ीवाले / केंद्र', icon: <Store className="h-4 w-4" /> },
-    { id: 'rewards', label: 'GreenRewards', labelHi: 'ग्रीन रिवॉर्ड्स', icon: <Award className="h-4 w-4" /> },
-    { id: 'aqi-guide', label: 'AQI Guide', labelHi: 'एक्यूआई गाइड', icon: <Wind className="h-4 w-4" /> },
+  const navItems: { id: PageType; label: string; labelHi: string }[] = [
+    { id: 'home', label: 'Dashboard', labelHi: 'डैशबोर्ड' },
+    { id: 'report-issue', label: 'Report Issue', labelHi: 'समस्या दर्ज करें' },
+    { id: 'waste-segregation', label: 'Live Segregation', labelHi: 'कचरा पृथक्करण' },
+    { id: 'sell-junk', label: 'Sell Junk', labelHi: 'कबाड़ बेचें' },
+    { id: 'scrap-dealers', label: 'Scrap Dealers', labelHi: 'कबाड़ीवाले / केंद्र' },
+    { id: 'rewards', label: 'GreenRewards', labelHi: 'ग्रीन रिवॉर्ड्स' },
+    { id: 'aqi-guide', label: 'AQI Guide', labelHi: 'एक्यूआई गाइड' },
   ];
 
   return (
@@ -76,15 +69,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs lg:text-sm font-semibold transition-all cursor-pointer ${
+                  className={`px-3 py-2 rounded-xl text-xs lg:text-sm font-semibold transition-all cursor-pointer ${
                     active 
                       ? 'bg-emerald-50 text-emerald-800 shadow-2xs' 
                       : 'text-slate-600 hover:text-emerald-700 hover:bg-slate-50'
                   }`}
                 >
-                  <span className={active ? 'text-emerald-600' : 'text-slate-400'}>
-                    {item.icon}
-                  </span>
                   <span>{isHindi ? item.labelHi : item.label}</span>
                 </button>
               );
