@@ -79,28 +79,13 @@ export const Dashboard: React.FC<DashboardProps> = ({
     <div id="dashboard-page" className="max-w-4xl mx-auto px-4 sm:px-6 py-6 pb-24 space-y-8">
       
       {/* Welcome Header matching Screenshot 1 */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            {getGreeting()}, {user.name.split(' ')[0]}
-          </h1>
-          <p className="text-sm text-slate-500 font-medium mt-0.5">
-            {isHindi ? 'क्या आप आज एक हरित बदलाव लाने के लिए तैयार हैं...?' : 'Ready to make a difference today...?'}
-          </p>
-        </div>
-
-        <button
-          onClick={() => onNavigate('profile')}
-          className="relative p-0.5 rounded-full ring-2 ring-emerald-500/30 hover:ring-emerald-500 transition-all cursor-pointer group"
-          title="Go to Profile"
-        >
-          <img 
-            src={user.avatarUrl} 
-            alt={user.name} 
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full object-cover shadow-sm group-hover:scale-105 transition-transform" 
-          />
-          <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" />
-        </button>
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          {getGreeting()}, {user.name.split(' ')[0]}
+        </h1>
+        <p className="text-sm text-slate-500 font-medium mt-0.5">
+          {isHindi ? 'क्या आप आज एक हरित बदलाव लाने के लिए तैयार हैं...?' : 'Ready to make a difference today...?'}
+        </p>
       </div>
 
       {/* Prominent Live Air-Quality Card matching Screenshot 1 */}
