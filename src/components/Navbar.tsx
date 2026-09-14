@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Leaf, 
   Wind, 
   Award, 
-  Globe
+  Globe,
+  User
 } from 'lucide-react';
 import { PageType, UserProfile } from '../types';
 
@@ -22,6 +23,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   isHindi,
   onToggleLanguage
 }) => {
+  const [imgError, setImgError] = useState(false);
+
   const navItems: { id: PageType; label: string; labelHi: string }[] = [
     { id: 'home', label: 'Dashboard', labelHi: 'डैशबोर्ड' },
     { id: 'report-issue', label: 'Report Issue', labelHi: 'समस्या दर्ज करें' },
@@ -108,17 +111,27 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Profile Avatar / Link */}
             <button
               onClick={() => onNavigate('profile')}
-              className={`flex items-center gap-2 p-1 pl-1 pr-2 sm:px-2 rounded-full border transition-all cursor-pointer ${
+              aria-label="Profile"
+              title={`Citizen Profile: ${user.name}`}
+              className={`flex items-center gap-2 p-1 sm:py-1 sm:pr-2.5 sm:pl-1 rounded-full border transition-all cursor-pointer ${
                 currentPage === 'profile'
-                  ? 'bg-emerald-50 border-emerald-300 ring-2 ring-emerald-500/20'
-                  : 'bg-white hover:bg-slate-50 border-slate-200'
+                  ? 'bg-emerald-50 border-emerald-400 ring-2 ring-emerald-500/20 text-emerald-900 shadow-2xs'
+                  : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700 shadow-2xs hover:border-slate-300'
               }`}
             >
-              <img
-                src={user.avatarUrl}
-                alt={user.name}
-                className="w-7 h-7 rounded-full object-cover border border-emerald-500/40"
-              />
+              <div className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center overflow-hidden shrink-0 border border-emerald-300">
+                {!imgError && user.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.name}
+                    referrerPolicy="no-referrer"
+                    onError={() => setImgError(true)}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="h-4 w-4 text-emerald-700" />
+                )}
+              </div>
               <span className="hidden sm:inline text-xs font-bold text-slate-800 max-w-[100px] truncate">
                 {user.name.split(' ')[0]}
               </span>
