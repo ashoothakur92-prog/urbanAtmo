@@ -156,7 +156,7 @@ export default function App() {
   }, [user.darkMode]);
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${
+    <div className={`min-h-screen min-h-[100dvh] flex-1 flex flex-col font-sans transition-colors duration-300 ${
       user.darkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-[#f7faf8] text-slate-900'
     }`}>
       

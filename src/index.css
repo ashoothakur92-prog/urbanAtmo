@@ -1,13 +1,41 @@
 @import "tailwindcss";
 
+/* Base html & body layout to cover any viewport gaps and ensure natural scrolling */
+html {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f7faf8;
+  color: #0f172a;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f7faf8;
+  color: #0f172a;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Dark mode theme styling when dark class is active */
 .dark {
   color-scheme: dark;
 }
 
+html.dark,
 .dark,
 .dark body {
-  background-color: #090d16;
+  background-color: #090d16 !important;
   color: #f1f5f9;
 }
 
@@ -79,4 +107,19 @@
 .dark input::placeholder,
 .dark textarea::placeholder {
   color: #64748b !important;
+}
+
+.dark #live-aqi-card-container > div {
+  background: linear-gradient(135deg, #111a2e 0%, #0f172a 60%, #1e293b 100%) !important;
+  border-color: #334155 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark #live-aqi-card-container .text-slate-800,
+.dark #live-aqi-card-container .text-slate-700 {
+  color: #f8fafc !important;
+}
+
+.dark #live-aqi-card-container .text-slate-600 {
+  color: #cbd5e1 !important;
 }
