@@ -39,6 +39,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UserProfile>(user);
   const [savedNotice, setSavedNotice] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,11 +77,18 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 relative z-10">
           {/* Avatar with Level Ring */}
           <div className="relative">
-            <img
-              src={user.avatarUrl}
-              alt={user.name}
-              className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-4 ring-emerald-500/20 shadow-md"
-            />
+            {avatarError || !user.avatarUrl ? (
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center ring-4 ring-emerald-500/20 shadow-md font-black text-2xl">
+                {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+              </div>
+            ) : (
+              <img
+                src={user.avatarUrl}
+                alt={user.name}
+                onError={() => setAvatarError(true)}
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-4 ring-emerald-500/20 shadow-md"
+              />
+            )}
             <span className="absolute bottom-1 right-1 p-1.5 rounded-full bg-emerald-600 text-white shadow-xs">
               <ShieldCheck className="h-3.5 w-3.5" />
             </span>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   MapPin, 
   Wind, 
@@ -31,6 +31,11 @@ export const AQICard: React.FC<AQICardProps> = ({
   const [tempUnit, setTempUnit] = useState<'C' | 'F'>('C');
   const [showSimModal, setShowSimModal] = useState(false);
   const [simAQI, setSimAQI] = useState<number>(aqiData.aqi);
+
+  // Keep simulator in sync when city or live AQI changes
+  useEffect(() => {
+    setSimAQI(aqiData.aqi);
+  }, [aqiData.aqi]);
 
   // Derive level info based on current or simulated AQI
   const currentAQI = showSimModal ? simAQI : aqiData.aqi;

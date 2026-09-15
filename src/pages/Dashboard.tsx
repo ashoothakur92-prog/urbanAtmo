@@ -248,7 +248,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </p>
           </div>
 
-          <button className="self-start sm:self-center px-4 py-2.5 rounded-full bg-white text-emerald-800 font-bold text-xs sm:text-sm shadow-md hover:bg-emerald-50 transition-colors flex items-center gap-1.5 shrink-0">
+          <button 
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onNavigate('waste-segregation');
+            }}
+            className="self-start sm:self-center px-4 py-2.5 rounded-full bg-white text-emerald-800 font-bold text-xs sm:text-sm shadow-md hover:bg-emerald-50 transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer"
+          >
             <span>{isHindi ? 'लाइव गाइड खोलें' : 'Open Live Guide'}</span>
             <ArrowUpRight className="h-4 w-4" />
           </button>

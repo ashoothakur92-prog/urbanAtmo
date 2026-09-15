@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   PageType, 
   UserProfile, 
@@ -134,9 +134,18 @@ export default function App() {
     showToast('info', 'Demo Data Reset', 'Restored to original initial state.');
   };
 
+  // Synchronize dark mode class to document element
+  useEffect(() => {
+    if (user.darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [user.darkMode]);
+
   return (
     <div className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${
-      user.darkMode ? 'bg-slate-950 text-slate-100' : 'bg-[#f7faf8] text-slate-900'
+      user.darkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-[#f7faf8] text-slate-900'
     }`}>
       
       {/* Toast Alert Component */}

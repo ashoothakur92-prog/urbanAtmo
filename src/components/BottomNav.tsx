@@ -43,7 +43,10 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     <>
       {/* Pop-up More Drawer for mobile users */}
       {showMoreMenu && (
-        <div className="fixed inset-0 z-50 md:hidden bg-slate-900/40 backdrop-blur-xs flex flex-col justify-end animate-in fade-in duration-200">
+        <div 
+          className="fixed inset-0 z-50 md:hidden bg-slate-900/40 backdrop-blur-xs flex flex-col justify-end animate-in fade-in duration-200"
+          onClick={() => setShowMoreMenu(false)}
+        >
           <div 
             className="bg-white rounded-t-3xl p-5 pb-24 shadow-2xl border-t border-slate-200"
             onClick={(e) => e.stopPropagation()}

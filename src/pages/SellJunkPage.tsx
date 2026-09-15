@@ -39,7 +39,37 @@ export const SellJunkPage: React.FC<SellJunkPageProps> = ({
   const [serviceType, setServiceType] = useState<'pickup' | 'dropoff'>('pickup');
   const [address, setAddress] = useState('House 42, Sector 14, Near Community Centre, Gurugram');
   const [pincode, setPincode] = useState('122001');
-  const [preferredDate, setPreferredDate] = useState('Tomorrow (Sunday)');
+
+  // Dynamic upcoming pickup dates
+  const availableDates = React.useMemo(() => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const list: { value: string; label: string }[] = [];
+    const now = new Date();
+
+    list.push({
+      value: 'Today (Within 3 hrs)',
+      label: `Today (${days[now.getDay()]}) - Express`
+    });
+
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    const tomorrowLabel = `Tomorrow (${days[tomorrow.getDay()]}, ${tomorrow.getDate()} ${months[tomorrow.getMonth()]})`;
+    list.push({
+      value: `Tomorrow (${days[tomorrow.getDay()]})`,
+      label: tomorrowLabel
+    });
+
+    for (let i = 2; i <= 5; i++) {
+      const future = new Date(now);
+      future.setDate(now.getDate() + i);
+      const str = `${days[future.getDay()]}, ${future.getDate()} ${months[future.getMonth()]}`;
+      list.push({ value: str, label: str });
+    }
+    return list;
+  }, []);
+
+  const [preferredDate, setPreferredDate] = useState<string>(availableDates[1].value);
   const [preferredSlot, setPreferredSlot] = useState('10:00 AM - 1:00 PM');
   const [notes, setNotes] = useState('Please bring digital weighing scale.');
   const [bookingConfirmation, setBookingConfirmation] = useState<ScrapBooking | null>(null);
@@ -378,10 +408,9 @@ export const SellJunkPage: React.FC<SellJunkPageProps> = ({
                     onChange={(e) => setPreferredDate(e.target.value)}
                     className="w-full px-2.5 py-2 rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-emerald-500 focus:outline-none bg-white"
                   >
-                    <option value="Today (Within 3 hrs)">Today (Express)</option>
-                    <option value="Tomorrow (Sunday)">Tomorrow (Sunday)</option>
-                    <option value="Monday">Monday</option>
-                    <option value="Wednesday">Wednesday</option>
+                    {availableDates.map(d => (
+                      <option key={d.value} value={d.value}>{d.label}</option>
+                    ))}
                   </select>
                 </div>
 
