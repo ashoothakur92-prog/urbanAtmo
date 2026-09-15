@@ -1,1 +1,82 @@
 @import "tailwindcss";
+
+/* Dark mode theme styling when dark class is active */
+.dark {
+  color-scheme: dark;
+}
+
+.dark,
+.dark body {
+  background-color: #090d16;
+  color: #f1f5f9;
+}
+
+/* Ensure cards and elevated surfaces adjust gracefully in dark mode */
+.dark .bg-white {
+  background-color: #111827 !important;
+  color: #f1f5f9 !important;
+}
+
+.dark .bg-slate-50 {
+  background-color: #1a2234 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark .bg-slate-100 {
+  background-color: #1f293d !important;
+  color: #e2e8f0 !important;
+}
+
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-200\/60,
+.dark .border-slate-200\/80 {
+  border-color: #1f293d !important;
+}
+
+.dark .text-slate-900,
+.dark .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+.dark .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+.dark header {
+  background-color: rgba(17, 24, 39, 0.95) !important;
+  border-color: #1f293d !important;
+}
+
+.dark footer {
+  background-color: #0b0f19 !important;
+  border-color: #1f293d !important;
+  color: #94a3b8 !important;
+}
+
+.dark #dashboard-page .bg-\[\#d5f5e3\]\/70 {
+  background-color: rgba(6, 78, 59, 0.45) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.dark #dashboard-page .bg-\[\#d5f5e3\]\/70:hover {
+  background-color: rgba(6, 78, 59, 0.65) !important;
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #1a2234 !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b !important;
+}

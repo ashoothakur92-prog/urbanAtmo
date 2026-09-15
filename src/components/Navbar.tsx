@@ -4,7 +4,9 @@ import {
   Wind, 
   Award, 
   Globe,
-  User
+  User,
+  Moon,
+  Sun
 } from 'lucide-react';
 import { PageType, UserProfile } from '../types';
 
@@ -14,6 +16,7 @@ interface NavbarProps {
   user: UserProfile;
   isHindi: boolean;
   onToggleLanguage: () => void;
+  onToggleDarkMode?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -21,7 +24,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   user,
   isHindi,
-  onToggleLanguage
+  onToggleLanguage,
+  onToggleDarkMode
 }) => {
   const [imgError, setImgError] = useState(false);
 
@@ -107,6 +111,22 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Globe className="h-3.5 w-3.5 text-emerald-600" />
               <span>{isHindi ? 'EN' : 'हिन्दी'}</span>
             </button>
+
+            {/* Dark Mode Quick Toggle */}
+            {onToggleDarkMode && (
+              <button
+                onClick={onToggleDarkMode}
+                className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer border border-slate-200/60"
+                title={user.darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                aria-label="Toggle Dark Mode"
+              >
+                {user.darkMode ? (
+                  <Sun className="h-4 w-4 text-amber-500" />
+                ) : (
+                  <Moon className="h-4 w-4 text-slate-600" />
+                )}
+              </button>
+            )}
 
             {/* Profile Avatar / Link */}
             <button
