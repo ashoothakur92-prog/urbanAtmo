@@ -33,11 +33,11 @@ export const AQIScaleVisual: React.FC<AQIScaleVisualProps> = ({
       {/* Main visual scale with vertical arrow on left matching Screenshot 2 */}
       <div className="flex items-stretch gap-3 sm:gap-6 max-w-xl mx-auto">
         {/* Vertical arrow indicator */}
-        <div className="flex flex-col items-center justify-between py-2 shrink-0 w-6 sm:w-8">
-          <div className="w-0.5 sm:w-1 flex-1 bg-emerald-600 relative rounded-full flex items-center justify-center">
+        <div className="flex flex-col items-center justify-between py-2 shrink-0">
+          <div className="w-0.5 sm:w-1 flex-1 bg-emerald-600 relative rounded-full">
             {/* Centered rotated label */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-90 whitespace-nowrap">
-              <span className="text-[9px] sm:text-[11px] font-bold text-emerald-700 dark:text-emerald-400 tracking-wider uppercase px-2 py-0.5 bg-white/95 dark:bg-slate-800 rounded border border-emerald-200 dark:border-emerald-800 shadow-2xs">
+              <span className="text-[9px] sm:text-[11px] font-bold text-emerald-700 tracking-wider uppercase px-2 py-0.5 bg-white/90 rounded border border-emerald-200">
                 {isHindi ? 'स्वास्थ्य जोखिम बढ़ता है' : 'HEALTH RISK INCREASES'}
               </span>
             </div>

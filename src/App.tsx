@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   PageType, 
   UserProfile, 
@@ -134,30 +134,9 @@ export default function App() {
     showToast('info', 'Demo Data Reset', 'Restored to original initial state.');
   };
 
-  const handleToggleDarkMode = () => {
-    const newDarkMode = !user.darkMode;
-    setUser(prev => ({ ...prev, darkMode: newDarkMode }));
-    showToast(
-      'info',
-      newDarkMode ? 'Dark Mode Active' : 'Light Mode Active',
-      newDarkMode ? 'Theme changed to low-light dark mode' : 'Theme changed to clean daylight mode'
-    );
-  };
-
-  // Sync dark mode class to html document and body
-  useEffect(() => {
-    if (user.darkMode) {
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('dark');
-    }
-  }, [user.darkMode]);
-
   return (
-    <div className={`min-h-screen min-h-[100dvh] flex-1 flex flex-col font-sans transition-colors duration-300 ${
-      user.darkMode ? 'dark bg-slate-950 text-slate-100' : 'bg-[#f7faf8] text-slate-900'
+    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${
+      user.darkMode ? 'bg-slate-950 text-slate-100' : 'bg-[#f7faf8] text-slate-900'
     }`}>
       
       {/* Toast Alert Component */}
@@ -170,7 +149,6 @@ export default function App() {
         user={user}
         isHindi={isHindi}
         onToggleLanguage={handleToggleLanguage}
-        onToggleDarkMode={handleToggleDarkMode}
       />
 
       {/* Main Content Area */}
