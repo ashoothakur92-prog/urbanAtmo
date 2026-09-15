@@ -132,8 +132,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <User className="h-4 w-4 text-emerald-700" />
                 )}
               </div>
-              <span className="hidden sm:inline text-xs font-bold text-slate-800 max-w-[100px] truncate">
-                {user.name.split(' ')[0]}
+              <span className="hidden sm:inline text-xs font-bold text-slate-800 max-w-[120px] truncate">
+                {user.name}
               </span>
             </button>
 

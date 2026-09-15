@@ -589,7 +589,7 @@ export const LEADERBOARD_CITIZENS: LeaderboardUser[] = [
   { rank: 4, name: 'Vikramjit Singh', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=60', locality: 'South City 1, Gurugram', points: 2190, badgesCount: 4 },
   { rank: 5, name: 'Kavita Joshi', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=60', locality: 'Sector 15 Part 2', points: 1820, badgesCount: 4 },
   { rank: 6, name: 'Amitabh Sen', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=60', locality: 'Cyber Hub Resident', points: 1540, badgesCount: 4 },
-  { rank: 7, name: 'Alex Sharma (You)', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=60', locality: 'Sector 14, Gurugram', points: 1450, isCurrentUser: true, badgesCount: 4 }
+  { rank: 7, name: 'Quantum coders (You)', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=60', locality: 'Sector 14, Gurugram', points: 1450, isCurrentUser: true, badgesCount: 4 }
 ];
 
 export const LEADERBOARD_COLLEGES = [
@@ -666,8 +666,8 @@ export const ECO_REWARDS: EcoReward[] = [
 ];
 
 export const INITIAL_USER_PROFILE: UserProfile = {
-  name: 'Alex Sharma',
-  email: 'alex.sharma@urbanatmo.org',
+  name: 'Quantum coders',
+  email: 'quantumcoders@urbanatmo.org',
   phone: '+91 98712 34567',
   city: 'Gurugram',
   sector: 'Sector 14, Old Judicial Complex',

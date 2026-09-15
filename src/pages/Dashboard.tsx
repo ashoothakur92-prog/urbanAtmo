@@ -81,7 +81,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Welcome Header matching Screenshot 1 */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          {getGreeting()}, {user.name.split(' ')[0]}
+          {getGreeting()}, {user.name}
         </h1>
         <p className="text-sm text-slate-500 font-medium mt-0.5">
           {isHindi ? 'क्या आप आज एक हरित बदलाव लाने के लिए तैयार हैं...?' : 'Ready to make a difference today...?'}

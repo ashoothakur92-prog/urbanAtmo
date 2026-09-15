@@ -391,7 +391,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
           </button>
 
           <button
-            onClick={() => alert('Logged out. You can sign in anytime as Alex Sharma.')}
+            onClick={() => alert(`Logged out. You can sign in anytime as ${user.name}.`)}
             className="text-xs font-bold text-rose-600 hover:text-rose-700 inline-flex items-center gap-1.5 cursor-pointer"
           >
             <LogOut className="h-3.5 w-3.5" />
