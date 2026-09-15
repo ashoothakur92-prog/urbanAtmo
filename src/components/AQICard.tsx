@@ -85,7 +85,7 @@ export const AQICard: React.FC<AQICardProps> = ({
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
             </span>
-            <span className="text-base sm:text-lg font-bold text-slate-800 tracking-tight">
+            <span className="text-base sm:text-lg font-black text-black tracking-tight" style={{ color: '#000000' }}>
               Live AQI
             </span>
             <span 
