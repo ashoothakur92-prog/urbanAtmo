@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   AlertTriangle, 
   Flame, 
@@ -14,7 +14,9 @@ import {
   Camera, 
   Crosshair,
   Filter,
-  Image as ImageIcon
+  Image as ImageIcon,
+  X,
+  RefreshCw
 } from 'lucide-react';
 import { EnvironmentalReport, IssueCategory, UrgencyLevel, ReportStatus } from '../types';
 
@@ -37,6 +39,64 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
   const [activeTab, setActiveTab] = useState<'form' | 'my-reports'>('form');
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [submittedReportId, setSubmittedReportId] = useState<string | null>(null);
+  const [isCameraActive, setIsCameraActive] = useState<boolean>(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  const startDirectCamera = async () => {
+    setCameraError(null);
+    setIsCameraActive(true);
+    try {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+        });
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play().catch(err => console.warn('Video play error:', err));
+        }
+      } else {
+        setCameraError('Camera API is not supported on this device/browser.');
+      }
+    } catch (err: any) {
+      console.error('Camera access error:', err);
+      setCameraError(err?.message || 'Unable to access camera. Please allow camera permissions.');
+    }
+  };
+
+  const stopDirectCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    setIsCameraActive(false);
+  };
+
+  const captureCameraPhoto = () => {
+    if (videoRef.current) {
+      const video = videoRef.current;
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+        setPhotoPreview(dataUrl);
+      }
+      stopDirectCamera();
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
 
   const issueCategories: { id: IssueCategory; label: string; labelHi: string; icon: React.ReactNode; desc: string }[] = [
     { id: 'garbage_dumping', label: 'Garbage Dumping', labelHi: 'कचरा फेंकना', icon: <Trash2 className="h-5 w-5 text-emerald-600" />, desc: 'Unattended piles on streets or plots' },
@@ -266,24 +326,49 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Upload Box */}
-              <label className="border-2 border-dashed border-slate-200 hover:border-emerald-400 rounded-2xl p-5 flex flex-col items-center justify-center text-center cursor-pointer bg-slate-50/60 hover:bg-emerald-50/30 transition-colors">
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleFileUpload} 
-                  className="hidden" 
-                />
-                <div className="p-3 rounded-full bg-white shadow-xs text-emerald-600 mb-2">
-                  <UploadCloud className="h-6 w-6" />
-                </div>
-                <span className="text-xs font-bold text-slate-700">
-                  {isHindi ? 'फोटो अपलोड करें या खींचें' : 'Click to Upload or Drag Photo'}
-                </span>
-                <span className="text-[10px] text-slate-400 mt-0.5">
-                  JPG, PNG up to 10MB
-                </span>
-              </label>
+              {/* Camera & Upload Options */}
+              <div className="flex flex-col gap-2.5">
+                {/* Direct Camera Button */}
+                <button
+                  type="button"
+                  onClick={startDirectCamera}
+                  className="p-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white shadow-md shadow-emerald-700/20 transition-all flex items-center justify-center gap-3 cursor-pointer group"
+                >
+                  <div className="p-2 rounded-xl bg-white/20 group-hover:bg-white/30 transition-colors">
+                    <Camera className="h-5 w-5 text-white animate-pulse" />
+                  </div>
+                  <div className="text-left">
+                    <span className="text-xs sm:text-sm font-bold block leading-tight">
+                      {isHindi ? 'सीधा कैमरा खोलें (Live Camera)' : 'Open Direct Camera'}
+                    </span>
+                    <span className="text-[10px] text-emerald-100 block">
+                      {isHindi ? 'सीधे कैमरे से फोटो खींचें' : 'Take photo instantly using device camera'}
+                    </span>
+                  </div>
+                </button>
+
+                {/* Upload from Gallery / File Box */}
+                <label className="border-2 border-dashed border-slate-200 hover:border-emerald-400 rounded-2xl p-4 flex items-center justify-center gap-3 text-center cursor-pointer bg-slate-50/60 hover:bg-emerald-50/30 transition-colors">
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handleFileUpload} 
+                    className="hidden" 
+                  />
+                  <div className="p-2 rounded-xl bg-white shadow-xs text-emerald-600">
+                    <UploadCloud className="h-5 w-5" />
+                  </div>
+                  <div className="text-left">
+                    <span className="text-xs font-bold text-slate-700 block leading-tight">
+                      {isHindi ? 'गैलरी / फाइल से चुनें' : 'Upload from Device / Gallery'}
+                    </span>
+                    <span className="text-[10px] text-slate-400 block">
+                      JPG, PNG, WebP up to 10MB
+                    </span>
+                  </div>
+                </label>
+              </div>
 
               {/* Photo Preview & Demo selector */}
               <div className="space-y-2">
@@ -524,6 +609,112 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
             )}
           </div>
 
+        </div>
+      )}
+
+      {/* Live Direct Camera Viewfinder Modal */}
+      {isCameraActive && (
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="relative w-full max-w-lg bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col">
+            {/* Modal Header */}
+            <div className="px-5 py-3.5 flex items-center justify-between border-b border-slate-800 text-white">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
+                <span className="font-bold text-sm">
+                  {isHindi ? 'लाइव कैमरा (Live Evidence Capture)' : 'Direct Camera Capture'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={stopDirectCamera}
+                className="p-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white cursor-pointer transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Viewfinder Video Stream */}
+            <div className="relative aspect-4/3 w-full bg-black flex items-center justify-center overflow-hidden">
+              {cameraError ? (
+                <div className="p-6 text-center text-slate-300 max-w-xs space-y-3">
+                  <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto" />
+                  <p className="text-xs">{cameraError}</p>
+                  <label className="inline-block px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer">
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      capture="environment"
+                      onChange={(e) => {
+                        handleFileUpload(e);
+                        stopDirectCamera();
+                      }} 
+                      className="hidden" 
+                    />
+                    {isHindi ? 'डिवाइस कैमरा ऐप खोलें' : 'Open Device Camera App'}
+                  </label>
+                </div>
+              ) : (
+                <>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Camera Reticle / Guides */}
+                  <div className="absolute inset-6 border border-white/30 rounded-2xl pointer-events-none flex flex-col justify-between p-2">
+                    <div className="flex justify-between">
+                      <span className="w-4 h-4 border-t-2 border-l-2 border-emerald-400" />
+                      <span className="w-4 h-4 border-t-2 border-r-2 border-emerald-400" />
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="w-4 h-4 border-b-2 border-l-2 border-emerald-400" />
+                      <span className="w-4 h-4 border-b-2 border-r-2 border-emerald-400" />
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Capture Controls */}
+            <div className="p-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={stopDirectCamera}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer transition-colors"
+              >
+                {isHindi ? 'रद्द करें' : 'Cancel'}
+              </button>
+
+              <button
+                type="button"
+                onClick={captureCameraPhoto}
+                disabled={!!cameraError}
+                className="w-16 h-16 rounded-full bg-white hover:bg-emerald-50 active:scale-95 border-4 border-emerald-500 shadow-lg flex items-center justify-center cursor-pointer transition-transform disabled:opacity-50"
+                title="Click to capture photo"
+              >
+                <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white">
+                  <Camera className="w-5 h-5" />
+                </div>
+              </button>
+
+              <label className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer transition-colors flex items-center gap-1.5">
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  capture="environment"
+                  onChange={(e) => {
+                    handleFileUpload(e);
+                    stopDirectCamera();
+                  }} 
+                  className="hidden" 
+                />
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>{isHindi ? 'नेटिव कैमरा' : 'Native App'}</span>
+              </label>
+            </div>
+          </div>
         </div>
       )}
 
