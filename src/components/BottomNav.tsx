@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { 
   Home, 
   User, 
-  CircleDot, 
   FileText, 
   Flame, 
   Store, 
   Award, 
   Wind, 
   Grid, 
-  X 
+  X,
+  Camera 
 } from 'lucide-react';
 import { PageType } from '../types';
 
@@ -130,14 +130,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                 }`}
                 title="Live Waste Segregation"
               >
-                {/* Outer and inner concentric circles matching the screenshot target icon */}
-                <div className={`w-8 h-8 rounded-full border-3 flex items-center justify-center ${
-                  currentPage === 'waste-segregation' ? 'border-emerald-600' : 'border-white'
-                }`}>
-                  <div className={`w-3.5 h-3.5 rounded-full ${
-                    currentPage === 'waste-segregation' ? 'bg-emerald-600' : 'bg-white'
-                  }`} />
-                </div>
+                <Camera className="w-6 h-6" />
               </button>
               <span className="text-[10px] font-bold text-white mt-0.5 tracking-tight whitespace-nowrap drop-shadow-xs">
                 {isHindi ? 'लाइव सेग्रिगेशन' : 'Live Segregation'}

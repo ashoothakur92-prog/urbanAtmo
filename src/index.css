@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Dark mode theme styling when dark class is active */
 .dark {
   color-scheme: dark;
@@ -66,4 +68,11 @@
 
 .dark #dashboard-page .bg-\[\#d5f5e3\]\/70:hover {
   background-color: rgba(6, 78, 59, 0.65) !important;
+}
+
+/* Live AQI card container: dark background in dark mode, light background in light mode */
+.dark #live-aqi-card-container > div:first-child {
+  background: linear-gradient(135deg, #090d16 0%, #0f172a 60%, #111e33 100%) !important;
+  border-color: rgba(51, 65, 85, 0.7) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
 }
