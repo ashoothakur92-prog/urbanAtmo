@@ -5,7 +5,6 @@ import {
   Trash2, 
   Droplet, 
   Wind, 
-  UploadCloud, 
   MapPin, 
   CheckCircle2, 
   Clock, 
@@ -326,48 +325,25 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Camera & Upload Options */}
-              <div className="flex flex-col gap-2.5">
-                {/* Direct Camera Button */}
+              {/* Direct Camera Option */}
+              <div>
                 <button
                   type="button"
                   onClick={startDirectCamera}
-                  className="p-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white shadow-md shadow-emerald-700/20 transition-all flex items-center justify-center gap-3 cursor-pointer group"
+                  className="w-full h-full min-h-[110px] p-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white shadow-md shadow-emerald-700/20 transition-all flex flex-col items-center justify-center text-center gap-2.5 cursor-pointer group"
                 >
-                  <div className="p-2 rounded-xl bg-white/20 group-hover:bg-white/30 transition-colors">
-                    <Camera className="h-5 w-5 text-white animate-pulse" />
+                  <div className="p-3 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors">
+                    <Camera className="h-6 w-6 text-white animate-pulse" />
                   </div>
-                  <div className="text-left">
+                  <div>
                     <span className="text-xs sm:text-sm font-bold block leading-tight">
                       {isHindi ? 'सीधा कैमरा खोलें (Live Camera)' : 'Open Direct Camera'}
                     </span>
-                    <span className="text-[10px] text-emerald-100 block">
+                    <span className="text-[10px] text-emerald-100 block mt-0.5">
                       {isHindi ? 'सीधे कैमरे से फोटो खींचें' : 'Take photo instantly using device camera'}
                     </span>
                   </div>
                 </button>
-
-                {/* Upload from Gallery / File Box */}
-                <label className="border-2 border-dashed border-slate-200 hover:border-emerald-400 rounded-2xl p-4 flex items-center justify-center gap-3 text-center cursor-pointer bg-slate-50/60 hover:bg-emerald-50/30 transition-colors">
-                  <input 
-                    type="file" 
-                    accept="image/*"
-                    capture="environment"
-                    onChange={handleFileUpload} 
-                    className="hidden" 
-                  />
-                  <div className="p-2 rounded-xl bg-white shadow-xs text-emerald-600">
-                    <UploadCloud className="h-5 w-5" />
-                  </div>
-                  <div className="text-left">
-                    <span className="text-xs font-bold text-slate-700 block leading-tight">
-                      {isHindi ? 'गैलरी / फाइल से चुनें' : 'Upload from Device / Gallery'}
-                    </span>
-                    <span className="text-[10px] text-slate-400 block">
-                      JPG, PNG, WebP up to 10MB
-                    </span>
-                  </div>
-                </label>
               </div>
 
               {/* Photo Preview & Demo selector */}
