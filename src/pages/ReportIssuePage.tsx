@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   AlertTriangle, 
   Flame, 
   Trash2, 
   Droplet, 
-  Wind, 
   MapPin, 
   CheckCircle2, 
   Clock, 
@@ -40,8 +40,22 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
   const [submittedReportId, setSubmittedReportId] = useState<string | null>(null);
   const [isCameraActive, setIsCameraActive] = useState<boolean>(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
+  const [isShutterFlashing, setIsShutterFlashing] = useState<boolean>(false);
+  const [cameraBtnRipples, setCameraBtnRipples] = useState<{ x: number; y: number; id: number }[]>([]);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
+  const triggerCameraClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const newRipple = { x, y, id: Date.now() + Math.random() };
+    setCameraBtnRipples((prev) => [...prev, newRipple]);
+    setTimeout(() => {
+      setCameraBtnRipples((prev) => prev.filter((r) => r.id !== newRipple.id));
+    }, 600);
+    startDirectCamera();
+  };
 
   const startDirectCamera = async () => {
     setCameraError(null);
@@ -74,19 +88,23 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
   };
 
   const captureCameraPhoto = () => {
-    if (videoRef.current) {
-      const video = videoRef.current;
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth || 640;
-      canvas.height = video.videoHeight || 480;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-        setPhotoPreview(dataUrl);
+    setIsShutterFlashing(true);
+    setTimeout(() => {
+      if (videoRef.current) {
+        const video = videoRef.current;
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+          setPhotoPreview(dataUrl);
+        }
       }
+      setIsShutterFlashing(false);
       stopDirectCamera();
-    }
+    }, 180);
   };
 
   useEffect(() => {
@@ -102,8 +120,7 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
     { id: 'open_burning', label: 'Open Trash Burning', labelHi: 'कचरा जलाना', icon: <Flame className="h-5 w-5 text-red-500" />, desc: 'Leaves, plastics, smoke hazards' },
     { id: 'overflowing_bins', label: 'Overflowing Bins', labelHi: 'भरे हुए कूड़ेदान', icon: <Trash2 className="h-5 w-5 text-amber-500" />, desc: 'Municipal bins spilling onto road' },
     { id: 'polluted_water', label: 'Polluted Water / Drain', labelHi: 'प्रदूषित नाला / जल', icon: <Droplet className="h-5 w-5 text-sky-600" />, desc: 'Black water, clogged drains, stench' },
-    { id: 'illegal_dumping', label: 'Illegal Dumping / Debris', labelHi: 'अवैध मलबा डंपिंग', icon: <AlertTriangle className="h-5 w-5 text-orange-500" />, desc: 'Construction debris, chemical cans' },
-    { id: 'air_pollution', label: 'Industrial / Air Pollution', labelHi: 'वायु व धुआं प्रदूषण', icon: <Wind className="h-5 w-5 text-purple-600" />, desc: 'Generator emissions, construction dust' }
+    { id: 'illegal_dumping', label: 'Illegal Dumping / Debris', labelHi: 'अवैध मलबा डंपिंग', icon: <AlertTriangle className="h-5 w-5 text-orange-500" />, desc: 'Construction debris, chemical cans' }
   ];
 
   const samplePhotos = [
@@ -262,11 +279,14 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
               {issueCategories.map((cat) => {
                 const isSelected = selectedCategory === cat.id;
                 return (
-                  <button
+                  <motion.button
                     key={cat.id}
                     type="button"
+                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.015 }}
+                    transition={{ type: "spring", stiffness: 450, damping: 22 }}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`p-3.5 rounded-2xl text-left border transition-all cursor-pointer flex flex-col justify-between ${
+                    className={`p-3.5 rounded-2xl text-left border transition-all cursor-pointer flex flex-col justify-between select-none ${
                       isSelected
                         ? 'bg-emerald-50/80 border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs'
                         : 'bg-slate-50 hover:bg-slate-100/80 border-slate-200/80 text-slate-700'
@@ -288,7 +308,7 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
                         {cat.desc}
                       </p>
                     </div>
-                  </button>
+                  </motion.button>
                 );
               })}
             </div>
@@ -327,12 +347,32 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Direct Camera Option */}
               <div>
-                <button
+                <motion.button
                   type="button"
-                  onClick={startDirectCamera}
-                  className="w-full h-full min-h-[110px] p-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white shadow-md shadow-emerald-700/20 transition-all flex flex-col items-center justify-center text-center gap-2.5 cursor-pointer group"
+                  whileTap={{ scale: 0.93 }}
+                  whileHover={{ scale: 1.015 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                  onClick={triggerCameraClick}
+                  className="relative overflow-hidden w-full h-full min-h-[110px] p-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-700/25 transition-colors flex flex-col items-center justify-center text-center gap-2.5 cursor-pointer group select-none"
                 >
-                  <div className="p-3 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors">
+                  {/* Dynamic Click Ripples */}
+                  <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl">
+                    <AnimatePresence>
+                      {cameraBtnRipples.map((ripple) => (
+                        <motion.span
+                          key={ripple.id}
+                          initial={{ scale: 0, opacity: 0.7 }}
+                          animate={{ scale: 4.5, opacity: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.55, ease: "easeOut" }}
+                          className="absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/45 pointer-events-none"
+                          style={{ left: ripple.x, top: ripple.y }}
+                        />
+                      ))}
+                    </AnimatePresence>
+                  </div>
+
+                  <div className="p-3 rounded-full bg-white/20 group-hover:bg-white/30 transition-all group-active:scale-90 duration-150">
                     <Camera className="h-6 w-6 text-white animate-pulse" />
                   </div>
                   <div>
@@ -343,7 +383,7 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
                       {isHindi ? 'सीधे कैमरे से फोटो खींचें' : 'Take photo instantly using device camera'}
                     </span>
                   </div>
-                </button>
+                </motion.button>
               </div>
 
               {/* Photo Preview & Demo selector */}
@@ -355,13 +395,14 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
                       alt="Uploaded preview" 
                       className="w-full h-full object-cover" 
                     />
-                    <button
+                    <motion.button
                       type="button"
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => setPhotoPreview('')}
-                      className="absolute top-2 right-2 px-2 py-1 bg-black/70 hover:bg-black text-white text-[10px] font-bold rounded-lg cursor-pointer"
+                      className="absolute top-2 right-2 px-2 py-1 bg-black/70 hover:bg-black text-white text-[10px] font-bold rounded-lg cursor-pointer transition-colors"
                     >
                       Remove
-                    </button>
+                    </motion.button>
                   </div>
                 ) : (
                   <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs">
@@ -370,9 +411,11 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
                     </span>
                     <div className="flex gap-2">
                       {samplePhotos.map((photo, i) => (
-                        <button
+                        <motion.button
                           key={i}
                           type="button"
+                          whileTap={{ scale: 0.92 }}
+                          whileHover={{ scale: 1.03 }}
                           onClick={() => setPhotoPreview(photo.url)}
                           className="flex-1 p-1 rounded-xl bg-white border border-slate-200 hover:border-emerald-500 transition-all text-center cursor-pointer group"
                         >
@@ -384,7 +427,7 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
                           <span className="text-[9px] font-semibold text-slate-600 group-hover:text-emerald-700 block truncate">
                             {photo.label}
                           </span>
-                        </button>
+                        </motion.button>
                       ))}
                     </div>
                   </div>
@@ -435,11 +478,14 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
                 {(['Low', 'Medium', 'High', 'Critical'] as UrgencyLevel[]).map((level) => {
                   const isSelected = urgency === level;
                   return (
-                    <button
+                    <motion.button
                       key={level}
                       type="button"
+                      whileTap={{ scale: 0.91 }}
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: "spring", stiffness: 450, damping: 20 }}
                       onClick={() => setUrgency(level)}
-                      className={`py-2 px-1 rounded-xl text-xs font-bold text-center border transition-all cursor-pointer ${
+                      className={`py-2 px-1 rounded-xl text-xs font-bold text-center border transition-all cursor-pointer select-none ${
                         isSelected
                           ? level === 'Critical' 
                             ? 'bg-red-600 text-white border-red-700 shadow-xs'
@@ -452,7 +498,7 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
                       }`}
                     >
                       {level}
-                    </button>
+                    </motion.button>
                   );
                 })}
               </div>
@@ -473,13 +519,16 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
             <span className="font-bold text-emerald-700 shrink-0">+50 GreenPoints</span>
           </div>
 
-          {/* Submit Button */}
-          <button
+          {/* Submit Button with tactile click animation */}
+          <motion.button
             type="submit"
-            className="w-full py-3.5 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-emerald-600/20 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2"
+            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.01 }}
+            transition={{ type: "spring", stiffness: 450, damping: 22 }}
+            className="w-full py-3.5 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-emerald-600/20 transition-all cursor-pointer flex items-center justify-center gap-2 select-none"
           >
             <span>{isHindi ? 'शिकायत जमा करें (Submit Report)' : 'Submit Report for Municipal Action'}</span>
-          </button>
+          </motion.button>
 
         </form>
       ) : (
@@ -638,6 +687,16 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
                     muted
                     className="w-full h-full object-cover"
                   />
+                  {/* Camera Shutter Flash Animation */}
+                  {isShutterFlashing && (
+                    <motion.div
+                      initial={{ opacity: 0.95 }}
+                      animate={{ opacity: 0 }}
+                      transition={{ duration: 0.22, ease: "easeOut" }}
+                      className="absolute inset-0 bg-white z-30 pointer-events-none"
+                    />
+                  )}
+
                   {/* Camera Reticle / Guides */}
                   <div className="absolute inset-6 border border-white/30 rounded-2xl pointer-events-none flex flex-col justify-between p-2">
                     <div className="flex justify-between">
@@ -655,27 +714,32 @@ export const ReportIssuePage: React.FC<ReportIssuePageProps> = ({
 
             {/* Capture Controls */}
             <div className="p-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between">
-              <button
+              <motion.button
                 type="button"
+                whileTap={{ scale: 0.93 }}
                 onClick={stopDirectCamera}
                 className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer transition-colors"
               >
                 {isHindi ? 'रद्द करें' : 'Cancel'}
-              </button>
+              </motion.button>
 
-              <button
+              {/* Shutter Button with tactile click animation */}
+              <motion.button
                 type="button"
+                whileTap={{ scale: 0.82 }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 500, damping: 20 }}
                 onClick={captureCameraPhoto}
                 disabled={!!cameraError}
-                className="w-16 h-16 rounded-full bg-white hover:bg-emerald-50 active:scale-95 border-4 border-emerald-500 shadow-lg flex items-center justify-center cursor-pointer transition-transform disabled:opacity-50"
+                className="relative w-16 h-16 rounded-full bg-white hover:bg-emerald-50 border-4 border-emerald-500 shadow-xl flex items-center justify-center cursor-pointer transition-colors disabled:opacity-50 select-none group"
                 title="Click to capture photo"
               >
-                <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white">
+                <div className={`w-10 h-10 rounded-full bg-emerald-600 group-hover:bg-emerald-700 flex items-center justify-center text-white transition-all duration-150 ${isShutterFlashing ? 'scale-75 bg-emerald-400' : ''}`}>
                   <Camera className="w-5 h-5" />
                 </div>
-              </button>
+              </motion.button>
 
-              <label className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer transition-colors flex items-center gap-1.5">
+              <label className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer transition-colors flex items-center gap-1.5 active:scale-95">
                 <input 
                   type="file" 
                   accept="image/*" 
