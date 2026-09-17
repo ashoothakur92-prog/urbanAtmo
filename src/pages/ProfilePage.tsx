@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   User, 
   MapPin, 
@@ -40,6 +40,10 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
   const [formData, setFormData] = useState<UserProfile>(user);
   const [savedNotice, setSavedNotice] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
+
+  useEffect(() => {
+    setFormData(user);
+  }, [user]);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -314,85 +318,94 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
       </section>
 
       {/* Preferences & Settings */}
-      <section className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-100 shadow-sm space-y-4">
-        <h3 className="font-bold text-slate-900 text-base">Preferences & Alerts</h3>
+      <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
+        <h3 className="font-bold text-slate-900 dark:text-white text-base">Preferences & Alerts</h3>
 
         <div className="space-y-3">
           {/* Dark Mode UI Toggle */}
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-white shadow-2xs">
-                {formData.darkMode ? <Moon className="h-4 w-4 text-purple-600" /> : <Sun className="h-4 w-4 text-amber-500" />}
+              <div className="p-2 rounded-xl bg-white dark:bg-slate-700 shadow-2xs">
+                {formData.darkMode ? <Moon className="h-4 w-4 text-purple-400" /> : <Sun className="h-4 w-4 text-amber-500" />}
               </div>
               <div>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-800">Dark Mode Interface</h4>
-                <p className="text-[11px] text-slate-500">Toggle nighttime low-emission theme</p>
+                <h4 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">Dark Mode Interface</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Toggle nighttime low-emission theme</p>
               </div>
             </div>
             <button
+              type="button"
+              role="switch"
+              aria-checked={formData.darkMode}
               onClick={toggleDarkMode}
-              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
-                formData.darkMode ? 'bg-purple-600' : 'bg-slate-300'
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                formData.darkMode ? 'bg-purple-600' : 'bg-slate-300 dark:bg-slate-700'
               }`}
             >
-              <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
-                formData.darkMode ? 'translate-x-6' : 'translate-x-0'
+              <div className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out ${
+                formData.darkMode ? 'translate-x-5' : 'translate-x-0'
               }`} />
             </button>
           </div>
 
           {/* High AQI Alerts */}
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-white shadow-2xs">
-                <Bell className="h-4 w-4 text-emerald-600" />
+              <div className="p-2 rounded-xl bg-white dark:bg-slate-700 shadow-2xs">
+                <Bell className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-800">Severe AQI Emergency Notifications</h4>
-                <p className="text-[11px] text-slate-500">Alert me when Gurugram AQI crosses 200 (Unhealthy)</p>
+                <h4 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">Severe AQI Emergency Notifications</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Alert me when Gurugram AQI crosses 200 (Unhealthy)</p>
               </div>
             </div>
             <button
+              type="button"
+              role="switch"
+              aria-checked={formData.highAqiAlerts}
               onClick={toggleHighAqi}
-              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
-                formData.highAqiAlerts ? 'bg-emerald-600' : 'bg-slate-300'
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                formData.highAqiAlerts ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'
               }`}
             >
-              <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
-                formData.highAqiAlerts ? 'translate-x-6' : 'translate-x-0'
+              <div className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out ${
+                formData.highAqiAlerts ? 'translate-x-5' : 'translate-x-0'
               }`} />
             </button>
           </div>
 
           {/* Weekly Recycling Reminders */}
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-white shadow-2xs">
-                <Recycle className="h-4 w-4 text-blue-600" />
+              <div className="p-2 rounded-xl bg-white dark:bg-slate-700 shadow-2xs">
+                <Recycle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-800">Weekly Kabadi / Scrap Reminder</h4>
-                <p className="text-[11px] text-slate-500">Prompt on Sunday mornings to bundle cardboard & bottles</p>
+                <h4 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">Weekly Kabadi / Scrap Reminder</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Prompt on Sunday mornings to bundle cardboard & bottles</p>
               </div>
             </div>
             <button
+              type="button"
+              role="switch"
+              aria-checked={formData.recyclingReminders}
               onClick={toggleReminders}
-              className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
-                formData.recyclingReminders ? 'bg-emerald-600' : 'bg-slate-300'
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                formData.recyclingReminders ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'
               }`}
             >
-              <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
-                formData.recyclingReminders ? 'translate-x-6' : 'translate-x-0'
+              <div className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out ${
+                formData.recyclingReminders ? 'translate-x-5' : 'translate-x-0'
               }`} />
             </button>
           </div>
         </div>
 
         {/* Reset & Logout Actions */}
-        <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
           <button
             onClick={onResetData}
-            className="text-xs font-semibold text-slate-500 hover:text-slate-800 inline-flex items-center gap-1.5 cursor-pointer"
+            className="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 inline-flex items-center gap-1.5 cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span>Reset Demo Data to Initial Defaults</span>
@@ -400,7 +413,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
 
           <button
             onClick={() => alert(`Logged out. You can sign in anytime as ${user.name}.`)}
-            className="text-xs font-bold text-rose-600 hover:text-rose-700 inline-flex items-center gap-1.5 cursor-pointer"
+            className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 inline-flex items-center gap-1.5 cursor-pointer"
           >
             <LogOut className="h-3.5 w-3.5" />
             <span>Sign Out</span>
