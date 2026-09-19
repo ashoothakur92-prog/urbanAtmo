@@ -583,12 +583,12 @@ export const BADGES_DATA: Badge[] = [
 ];
 
 export const LEADERBOARD_CITIZENS: LeaderboardUser[] = [
-  { rank: 1, name: 'Priya Sundaram', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=60', locality: 'Sector 45, Gurugram', points: 3420, badgesCount: 6 },
-  { rank: 2, name: 'Rohan Mehra', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=60', locality: 'DLF Phase 4, Gurugram', points: 2980, badgesCount: 5 },
-  { rank: 3, name: 'Ananya Verma', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=60', locality: 'Sector 56, Gurugram', points: 2650, badgesCount: 5 },
-  { rank: 4, name: 'Vikramjit Singh', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=60', locality: 'South City 1, Gurugram', points: 2190, badgesCount: 4 },
-  { rank: 5, name: 'Kavita Joshi', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=60', locality: 'Sector 15 Part 2', points: 1820, badgesCount: 4 },
-  { rank: 6, name: 'Amitabh Sen', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=60', locality: 'Cyber Hub Resident', points: 1540, badgesCount: 4 },
+  { rank: 1, name: 'Aadarsh Pathak', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=60', locality: 'Sector 45, Gurugram', points: 3420, badgesCount: 6 },
+  { rank: 2, name: 'Ashoo Chandel', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=60', locality: 'DLF Phase 4, Gurugram', points: 2980, badgesCount: 5 },
+  { rank: 3, name: 'Utkarsha Srivastava', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=60', locality: 'Sector 56, Gurugram', points: 2650, badgesCount: 5 },
+  { rank: 4, name: 'Kunal Saini', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=60', locality: 'South City 1, Gurugram', points: 2190, badgesCount: 4 },
+  { rank: 5, name: 'Saloni Singh', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=60', locality: 'Sector 15 Part 2', points: 1820, badgesCount: 4 },
+  { rank: 6, name: 'Saliya Afreen', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=60', locality: 'Cyber Hub Resident', points: 1540, badgesCount: 4 },
   { rank: 7, name: 'Quantum coders (You)', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=60', locality: 'Sector 14, Gurugram', points: 1450, isCurrentUser: true, badgesCount: 4 }
 ];
 

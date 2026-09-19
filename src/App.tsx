@@ -26,13 +26,110 @@ import { RewardsPage } from './pages/RewardsPage';
 import { AQIGuidePage } from './pages/AQIGuidePage';
 import { ProfilePage } from './pages/ProfilePage';
 
+const VALID_PAGES: PageType[] = [
+  'home',
+  'report-issue',
+  'waste-segregation',
+  'sell-junk',
+  'scrap-dealers',
+  'rewards',
+  'aqi-guide',
+  'profile'
+];
+
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<PageType>('home');
-  const [user, setUser] = useState<UserProfile>(INITIAL_USER_PROFILE);
-  const [reports, setReports] = useState<EnvironmentalReport[]>(INITIAL_REPORTS);
-  const [selectedCity, setSelectedCity] = useState<string>('Gurugram');
-  const [isHindi, setIsHindi] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<PageType>(() => {
+    try {
+      const hash = window.location.hash.replace('#', '') as PageType;
+      if (VALID_PAGES.includes(hash)) return hash;
+      const savedPage = localStorage.getItem('urbanatmo_current_page') as PageType;
+      if (VALID_PAGES.includes(savedPage)) return savedPage;
+    } catch {}
+    return 'home';
+  });
+
+  const [user, setUser] = useState<UserProfile>(() => {
+    try {
+      const saved = localStorage.getItem('urbanatmo_user_profile');
+      if (saved) {
+        return { ...INITIAL_USER_PROFILE, ...JSON.parse(saved) };
+      }
+    } catch {}
+    return INITIAL_USER_PROFILE;
+  });
+
+  const [reports, setReports] = useState<EnvironmentalReport[]>(() => {
+    try {
+      const saved = localStorage.getItem('urbanatmo_reports');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch {}
+    return INITIAL_REPORTS;
+  });
+
+  const [selectedCity, setSelectedCity] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('urbanatmo_city');
+      if (saved) return saved;
+    } catch {}
+    return 'Gurugram';
+  });
+
+  const [isHindi, setIsHindi] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('urbanatmo_hindi');
+      if (saved !== null) return saved === 'true';
+    } catch {}
+    return false;
+  });
+
   const [toast, setToast] = useState<ToastMessage | null>(null);
+
+  // Sync state changes with localStorage and hash
+  useEffect(() => {
+    try {
+      localStorage.setItem('urbanatmo_current_page', currentPage);
+      if (window.location.hash !== `#${currentPage}`) {
+        window.location.hash = currentPage;
+      }
+    } catch {}
+  }, [currentPage]);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '') as PageType;
+      if (VALID_PAGES.includes(hash) && hash !== currentPage) {
+        setCurrentPage(hash);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [currentPage]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('urbanatmo_user_profile', JSON.stringify(user));
+    } catch {}
+  }, [user]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('urbanatmo_reports', JSON.stringify(reports));
+    } catch {}
+  }, [reports]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('urbanatmo_city', selectedCity);
+    } catch {}
+  }, [selectedCity]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('urbanatmo_hindi', String(isHindi));
+    } catch {}
+  }, [isHindi]);
 
   const currentAQIData = INITIAL_CITY_AQI[selectedCity] || INITIAL_CITY_AQI['Gurugram'];
 
@@ -128,6 +225,13 @@ export default function App() {
 
   // Reset all state to defaults
   const handleResetData = () => {
+    try {
+      localStorage.removeItem('urbanatmo_user_profile');
+      localStorage.removeItem('urbanatmo_reports');
+      localStorage.removeItem('urbanatmo_city');
+      localStorage.removeItem('urbanatmo_hindi');
+      localStorage.removeItem('urbanatmo_rewards_list');
+    } catch {}
     setUser(INITIAL_USER_PROFILE);
     setReports(INITIAL_REPORTS);
     setSelectedCity('Gurugram');

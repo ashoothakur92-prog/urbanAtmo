@@ -34,9 +34,22 @@ export const RewardsPage: React.FC<RewardsPageProps> = ({
   isHindi
 }) => {
   const [activeLeaderboardTab, setActiveLeaderboardTab] = useState<'citizens' | 'colleges' | 'wards'>('citizens');
-  const [rewardsList, setRewardsList] = useState<EcoReward[]>(ECO_REWARDS);
+  const [rewardsList, setRewardsList] = useState<EcoReward[]>(() => {
+    try {
+      const saved = localStorage.getItem('urbanatmo_rewards_list');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return ECO_REWARDS;
+  });
   const [selectedRewardToRedeem, setSelectedRewardToRedeem] = useState<EcoReward | null>(null);
   const [claimedCode, setClaimedCode] = useState<string | null>(null);
+
+  // Persist rewards list across refreshes
+  React.useEffect(() => {
+    try {
+      localStorage.setItem('urbanatmo_rewards_list', JSON.stringify(rewardsList));
+    } catch {}
+  }, [rewardsList]);
 
   const getBadgeIcon = (iconName: string) => {
     switch (iconName) {
@@ -257,46 +270,50 @@ export const RewardsPage: React.FC<RewardsPageProps> = ({
         {/* Citizens List */}
         {activeLeaderboardTab === 'citizens' && (
           <div className="space-y-2">
-            {LEADERBOARD_CITIZENS.map((userItem) => (
-              <div
-                key={userItem.rank}
-                className={`p-3 sm:p-4 rounded-2xl flex items-center justify-between transition-all ${
-                  userItem.isCurrentUser
-                    ? 'bg-emerald-50 border-2 border-emerald-400 font-semibold'
-                    : 'bg-slate-50/70 border border-slate-100 hover:bg-slate-100/60'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <span className={`w-6 text-center font-black text-sm ${
-                    userItem.rank === 1 ? 'text-amber-500 font-extrabold' :
-                    userItem.rank === 2 ? 'text-slate-400 font-bold' :
-                    userItem.rank === 3 ? 'text-amber-700 font-bold' : 'text-slate-500'
-                  }`}>
-                    #{userItem.rank}
-                  </span>
-                  <img
-                    src={userItem.avatar}
-                    alt={userItem.name}
-                    className="w-9 h-9 rounded-full object-cover border border-slate-200"
-                  />
-                  <div>
-                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">
-                      {userItem.name}
-                    </h4>
-                    <p className="text-[11px] text-slate-500">{userItem.locality}</p>
+            {LEADERBOARD_CITIZENS.map((userItem) => {
+              const displayName = userItem.isCurrentUser ? `${user.name} (You)` : userItem.name;
+              const displayPoints = userItem.isCurrentUser ? user.points : userItem.points;
+              return (
+                <div
+                  key={userItem.rank}
+                  className={`p-3 sm:p-4 rounded-2xl flex items-center justify-between transition-all ${
+                    userItem.isCurrentUser
+                      ? 'bg-emerald-50 border-2 border-emerald-400 font-semibold'
+                      : 'bg-slate-50/70 border border-slate-100 hover:bg-slate-100/60'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`w-6 text-center font-black text-sm ${
+                      userItem.rank === 1 ? 'text-amber-500 font-extrabold' :
+                      userItem.rank === 2 ? 'text-slate-400 font-bold' :
+                      userItem.rank === 3 ? 'text-amber-700 font-bold' : 'text-slate-500'
+                    }`}>
+                      #{userItem.rank}
+                    </span>
+                    <img
+                      src={userItem.isCurrentUser && user.avatarUrl ? user.avatarUrl : userItem.avatar}
+                      alt={displayName}
+                      className="w-9 h-9 rounded-full object-cover border border-slate-200"
+                    />
+                    <div>
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-900">
+                        {displayName}
+                      </h4>
+                      <p className="text-[11px] text-slate-500">{userItem.locality}</p>
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="font-mono font-extrabold text-xs sm:text-sm text-emerald-700">
+                      {displayPoints} pts
+                    </span>
+                    <span className="text-[10px] text-slate-400 block">
+                      {userItem.badgesCount} badges
+                    </span>
                   </div>
                 </div>
-
-                <div className="text-right">
-                  <span className="font-mono font-extrabold text-xs sm:text-sm text-emerald-700">
-                    {userItem.points} pts
-                  </span>
-                  <span className="text-[10px] text-slate-400 block">
-                    {userItem.badgesCount} badges
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
