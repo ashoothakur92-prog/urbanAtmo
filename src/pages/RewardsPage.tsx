@@ -239,11 +239,11 @@ export const RewardsPage: React.FC<RewardsPageProps> = ({
           </div>
 
           {/* Leaderboard Tabs */}
-          <div className="flex items-center p-1 bg-slate-100 rounded-full self-start sm:self-center">
+          <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-full self-start sm:self-center border border-slate-200/50 dark:border-slate-700/60">
             <button
               onClick={() => setActiveLeaderboardTab('citizens')}
               className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                activeLeaderboardTab === 'citizens' ? 'bg-white text-emerald-800 shadow-2xs' : 'text-slate-600'
+                activeLeaderboardTab === 'citizens' ? 'bg-white dark:bg-slate-700 text-emerald-800 dark:text-emerald-300 shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Local Citizens
@@ -251,7 +251,7 @@ export const RewardsPage: React.FC<RewardsPageProps> = ({
             <button
               onClick={() => setActiveLeaderboardTab('colleges')}
               className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                activeLeaderboardTab === 'colleges' ? 'bg-white text-emerald-800 shadow-2xs' : 'text-slate-600'
+                activeLeaderboardTab === 'colleges' ? 'bg-white dark:bg-slate-700 text-emerald-800 dark:text-emerald-300 shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Colleges
@@ -259,7 +259,7 @@ export const RewardsPage: React.FC<RewardsPageProps> = ({
             <button
               onClick={() => setActiveLeaderboardTab('wards')}
               className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                activeLeaderboardTab === 'wards' ? 'bg-white text-emerald-800 shadow-2xs' : 'text-slate-600'
+                activeLeaderboardTab === 'wards' ? 'bg-white dark:bg-slate-700 text-emerald-800 dark:text-emerald-300 shadow-2xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Wards
@@ -278,36 +278,36 @@ export const RewardsPage: React.FC<RewardsPageProps> = ({
                   key={userItem.rank}
                   className={`p-3 sm:p-4 rounded-2xl flex items-center justify-between transition-all ${
                     userItem.isCurrentUser
-                      ? 'bg-emerald-50 border-2 border-emerald-400 font-semibold'
-                      : 'bg-slate-50/70 border border-slate-100 hover:bg-slate-100/60'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-400 dark:border-emerald-500/70 text-slate-900 dark:text-emerald-100 font-semibold shadow-xs'
+                      : 'bg-slate-50/80 dark:bg-slate-800/70 border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-100/80 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-200'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <span className={`w-6 text-center font-black text-sm ${
-                      userItem.rank === 1 ? 'text-amber-500 font-extrabold' :
-                      userItem.rank === 2 ? 'text-slate-400 font-bold' :
-                      userItem.rank === 3 ? 'text-amber-700 font-bold' : 'text-slate-500'
+                      userItem.rank === 1 ? 'text-amber-500 dark:text-amber-400 font-extrabold' :
+                      userItem.rank === 2 ? 'text-slate-400 dark:text-slate-400 font-bold' :
+                      userItem.rank === 3 ? 'text-amber-700 dark:text-amber-400 font-bold' : 'text-slate-500 dark:text-slate-400'
                     }`}>
                       #{userItem.rank}
                     </span>
                     <img
                       src={userItem.isCurrentUser && user.avatarUrl ? user.avatarUrl : userItem.avatar}
                       alt={displayName}
-                      className="w-9 h-9 rounded-full object-cover border border-slate-200"
+                      className="w-9 h-9 rounded-full object-cover border border-slate-200 dark:border-slate-700"
                     />
                     <div>
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-900">
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100">
                         {displayName}
                       </h4>
-                      <p className="text-[11px] text-slate-500">{userItem.locality}</p>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400">{userItem.locality}</p>
                     </div>
                   </div>
 
                   <div className="text-right">
-                    <span className="font-mono font-extrabold text-xs sm:text-sm text-emerald-700">
+                    <span className="font-mono font-extrabold text-xs sm:text-sm text-emerald-700 dark:text-emerald-400">
                       {displayPoints} pts
                     </span>
-                    <span className="text-[10px] text-slate-400 block">
+                    <span className="text-[10px] text-slate-400 dark:text-slate-400 block">
                       {userItem.badgesCount} badges
                     </span>
                   </div>
@@ -323,21 +323,21 @@ export const RewardsPage: React.FC<RewardsPageProps> = ({
             {LEADERBOARD_COLLEGES.map((col) => (
               <div
                 key={col.rank}
-                className="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between"
+                className="p-3 sm:p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/70 border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-100/80 dark:hover:bg-slate-800 flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <span className="w-6 text-center font-bold text-sm text-slate-700">
+                  <span className="w-6 text-center font-bold text-sm text-slate-700 dark:text-slate-300">
                     #{col.rank}
                   </span>
-                  <div className="p-2 rounded-xl bg-white shadow-2xs">
-                    <Building2 className="h-4 w-4 text-emerald-600" />
+                  <div className="p-2 rounded-xl bg-white dark:bg-slate-700 shadow-2xs">
+                    <Building2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div>
-                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">{col.name}</h4>
-                    <p className="text-[11px] text-slate-500">{col.locality} • {col.members} student volunteers</p>
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100">{col.name}</h4>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">{col.locality} • {col.members} student volunteers</p>
                   </div>
                 </div>
-                <span className="font-mono font-extrabold text-xs sm:text-sm text-emerald-700">
+                <span className="font-mono font-extrabold text-xs sm:text-sm text-emerald-700 dark:text-emerald-400">
                   {col.points.toLocaleString()} pts
                 </span>
               </div>
@@ -351,21 +351,21 @@ export const RewardsPage: React.FC<RewardsPageProps> = ({
             {LEADERBOARD_WARDS.map((ward) => (
               <div
                 key={ward.rank}
-                className="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between"
+                className="p-3 sm:p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/70 border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-100/80 dark:hover:bg-slate-800 flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <span className="w-6 text-center font-bold text-sm text-slate-700">
+                  <span className="w-6 text-center font-bold text-sm text-slate-700 dark:text-slate-300">
                     #{ward.rank}
                   </span>
-                  <div className="p-2 rounded-xl bg-white shadow-2xs">
-                    <Recycle className="h-4 w-4 text-teal-600" />
+                  <div className="p-2 rounded-xl bg-white dark:bg-slate-700 shadow-2xs">
+                    <Recycle className="h-4 w-4 text-teal-600 dark:text-teal-400" />
                   </div>
                   <div>
-                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">{ward.name}</h4>
-                    <p className="text-[11px] text-slate-500">{ward.locality} • {ward.wasteDivertedKg} kg diverted</p>
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100">{ward.name}</h4>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">{ward.locality} • {ward.wasteDivertedKg} kg diverted</p>
                   </div>
                 </div>
-                <span className="font-mono font-extrabold text-xs sm:text-sm text-emerald-700">
+                <span className="font-mono font-extrabold text-xs sm:text-sm text-emerald-700 dark:text-emerald-400">
                   {ward.points.toLocaleString()} pts
                 </span>
               </div>

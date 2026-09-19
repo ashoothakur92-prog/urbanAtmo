@@ -19,9 +19,27 @@
   color: #f1f5f9 !important;
 }
 
-.dark .bg-slate-50 {
+.dark .bg-slate-50,
+.dark .bg-slate-50\/70,
+.dark .bg-slate-50\/80 {
   background-color: #1a2234 !important;
   color: #e2e8f0 !important;
+}
+
+.dark .bg-emerald-50 {
+  background-color: rgba(6, 78, 59, 0.35) !important;
+  color: #d1fae5 !important;
+}
+
+.dark #rewards-page .bg-emerald-50 {
+  background-color: rgba(6, 78, 59, 0.35) !important;
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  color: #d1fae5 !important;
+}
+
+.dark #rewards-page .text-emerald-700,
+.dark #rewards-page .text-emerald-800 {
+  color: #34d399 !important;
 }
 
 .dark .bg-slate-100 {
